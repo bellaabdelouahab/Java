@@ -5,14 +5,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
-//import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFileChooser;
+import java.awt.FileDialog;
+import java.awt.Frame;
 public class App extends Application {
     public static void runcommand(String command_ , TextArea terminalField){
         try {
@@ -40,94 +46,106 @@ public class App extends Application {
     }
     @Override
     public void start(Stage primaryStage) {
-        Pane root = new Pane();
-        Scene scene = new Scene(root,750 , 500);
-        root.setMaxSize(750, 500);
+        AnchorPane root = new AnchorPane();
         primaryStage.setTitle("TEXT EDITOR");
-        Button btn = new Button();
-        Line line1 = new Line();
-        line1.setStartX(375.0f); 
-        line1.setStartY(32.0f);
-        line1.setEndX(375.0f); 
-        line1.setEndY(scene.getHeight()-32);
-        Line line2 = new Line();
-        line2.setStartX(0.0f); 
-        line2.setStartY(32.0f);
-        line2.setEndX(scene.getWidth()); 
-        line2.setEndY(32.0f);
-        TextArea codeField = new TextArea();
-        codeField.setTranslateY(32);
-        codeField.setPrefSize(375,436);
-        codeField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        Buttons buttons= new Buttons();
+        Fields mainfiFields = new Fields();
+        mainfiFields.codeField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent arg0) {
-                btn.setText("Save");                
+                buttons.save.setText("Save");                
             }
         });
-        TextArea terminalField = new TextArea();
-        terminalField.setTranslateY(32);
-        terminalField.setTranslateX(375);
-        terminalField.setEditable(false);
-        terminalField.setPrefSize(375,436);
-        terminalField.setWrapText(true);
-        terminalField.setText("PS "+System.getProperty("user.dir")+"> ");
-        btn.setText("Save");
-        btn.setMinWidth(250);
-        btn.setMinHeight(32);
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        buttons.save.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
                     FileWriter myWriter = new FileWriter("test.java");
-                    myWriter.write(codeField.getText());
+                    myWriter.write(mainfiFields.codeField.getText());
                     myWriter.close();
-                    btn.setText("Saved");
+                    buttons.save.setText("Saved");
                 } 
                 catch (IOException e) {
-                    System.out.println("An error occurred.");
                     e.printStackTrace();
                 }
             }
         });
-        Button btn1 = new Button();
-        btn1.setText("Compile");
-        btn1.setLayoutX(250);
-        btn1.setMinWidth(250);
-        btn1.setMinHeight(32);
-        btn1.setOnAction(new EventHandler<ActionEvent>() {
+        buttons.compile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                runcommand("javac test.java",terminalField);
+                runcommand("javac test.java",mainfiFields.terminalField);
             }
-        });
-        Button btn2 = new Button();
-        btn2.setText("Run");
-        btn2.setLayoutX(500);
-        btn2.setMinWidth(250);
-        btn2.setMinHeight(32);
-        btn2.setOnAction(new EventHandler<ActionEvent>() {
- 
+        });;
+        buttons.run.setOnAction(new EventHandler<ActionEvent>() {
+    
             @Override
             public void handle(ActionEvent event) {
-                runcommand("java -cp . test 'hello'",terminalField);
+                runcommand("java -cp . test 'hello'",mainfiFields.terminalField);
             }
         });
-        root.getChildren().add(btn);
-        root.getChildren().add(btn1);
-        root.getChildren().add(btn2);
+        buttons.filedit.setOnAction( new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(buttons.newfileButton.visibleProperty().getValue()==false){
+                    buttons.newfileButton.setVisible(true);
+                    buttons.openfileButton.setVisible(true);
+                    buttons.openfolderButton.setVisible(true);
+                }
+                else{
+                    buttons.newfileButton.setVisible(false);
+                    buttons.openfileButton.setVisible(false);
+                    buttons.openfolderButton.setVisible(false);
+                }
+            }
+        });
+        buttons.openfileButton.setOnAction( new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FileDialog miniwindow = new FileDialog((Frame)null, "Select File to open");
+                miniwindow.setMode(FileDialog.LOAD);
+                miniwindow.setVisible(true);
+                String file=miniwindow.getFile();
+                System.out.println(file);
+            }
+        });
+        buttons.openfolderButton.setOnAction( new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                JFileChooser file = new JFileChooser();
+                file.setFileSelectionMode((JFileChooser.DIRECTORIES_ONLY));
+                file.showSaveDialog(null);
+                System.out.println(file.getCurrentDirectory());
+                List<Button> listoffiles = new ArrayList<Button>();
+                listoffiles=buttons.creat_buttons(file.getCurrentDirectory().toString(), 1);
+                for(int i=0;i<listoffiles.size();i++){
+                    root.getChildren().add(listoffiles.get(i));
+                }
+            }
+        });
+        Line line1 = new Line();
+        line1.setStartX(200.0f); 
+        line1.setStartY(0.0f);
+        line1.setEndX(200.0f); 
+        line1.setEndY(32);
+        root.getChildren().add(buttons.save);
+        root.getChildren().add(buttons.compile);
+        root.getChildren().add(buttons.run);
+        root.getChildren().add(buttons.filedit);
+        root.getChildren().add(buttons.newfileButton);
+        root.getChildren().add(buttons.openfileButton);
+        root.getChildren().add(buttons.openfolderButton);
+        root.getChildren().add(mainfiFields.codeField);
+        root.getChildren().add(mainfiFields.terminalField);
         root.getChildren().add(line1);
-        root.getChildren().add(line2);
-        root.getChildren().add(codeField);
-        root.getChildren().add(terminalField);
-        /*EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
             @Override 
-            public void handle(MouseEvent e) { 
-                //System.out.println((int)(Math.random()*100));
+            public void handle(MouseEvent e) {
                 System.out.println(e.getX());
                 System.out.println(e.getY());
             } 
         };
-         root.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);   */
+        root.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+        Scene scene = new Scene(root,750 , 500);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
