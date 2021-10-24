@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 public class Buttons{
         Button save;
@@ -35,8 +36,9 @@ public class Buttons{
             filedit.setText("File");
             filedit.setMinWidth(100);
             filedit.setMinHeight(32);
-            filedit.setStyle("-fx-border-color:#383838;-fx-border-width:2px;-fx-border-radius:0;;-fx-background-color:#383838;-fx-text-fill:black");
-        
+            filedit.setStyle("-fx-alignment:LEFT;-fx-border-color:#383838;-fx-border-width:2px;-fx-border-radius:0;;-fx-background-color:#383838;-fx-text-fill:black");
+            filedit.setPadding(new Insets(0,0,0,80));
+
             newfileButton = new Button();
             newfileButton.setText("new File");
             newfileButton.setMinWidth(100);
@@ -60,28 +62,38 @@ public class Buttons{
             openfolderButton.setVisible(false);
         
         };
-        public List<Button> creat_buttons(String path,int j){
+        public List<Button> creat_buttons(String path,int j,int k){
             List<Button> list = new ArrayList<Button>();
             File folder = new File(path);
             File[] filelist = folder.listFiles();
             for (int i=0 ; i<filelist.length;i++){
                 if(filelist[i].isFile()){
-                    System.out.println(filelist[i].getName());
+                    System.out.println(filelist[i].getName().toString());
                     button = new Button();
                     button.setText(filelist[i].getName());
                     button.setMinWidth(200);
                     button.setMinHeight(32);
                     button.setLayoutY(j*32);
                     button.setVisible(true);
-                    button.setStyle("-fx-background-color:transparent;-fx-background-radious:0;");
+                    button.setStyle("-fx-alignment:LEFT;-fx-background-color:transparent;-fx-background-radious:0;");
+                    button.setPadding(new Insets(0,0,0,20*k));
                     list.add(button);
                     j++;
                 }
                 else if(filelist[i].isDirectory()){
+                    button = new Button();
+                    button.setText(filelist[i].getName());
+                    button.setMinWidth(200);
+                    button.setMinHeight(32);
+                    button.setLayoutY(j*32);
+                    button.setStyle("-fx-alignment:center-left;-fx-background-color:transparent;-fx-background-radious:0;");
+                    button.setPadding(new Insets(0,0,0,20*k));
+                    list.add(button);
+                    j++;
                     List<Button> butonsn = new ArrayList<Button>();
-                    butonsn=creat_buttons(path+'/'+filelist[i].getName().toString() , j);
-                    for(int k=0;k<butonsn.size();k++){
-                        list.add(butonsn.get(k));
+                    butonsn=creat_buttons(path+'/'+filelist[i].getName().toString() , j,k+1);
+                    for(int l=0;l<butonsn.size();l++){
+                        list.add(butonsn.get(l));
                         j++;
                     }
                     

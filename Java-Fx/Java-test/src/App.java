@@ -116,9 +116,15 @@ public class App extends Application {
                 file.showSaveDialog(null);
                 System.out.println(file.getCurrentDirectory());
                 List<Button> listoffiles = new ArrayList<Button>();
-                listoffiles=buttons.creat_buttons(file.getCurrentDirectory().toString(), 1);
+                listoffiles=buttons.creat_buttons(file.getCurrentDirectory().toString(), 1,0);
                 for(int i=0;i<listoffiles.size();i++){
                     root.getChildren().add(listoffiles.get(i));
+                    Line line1 = new Line();
+                    line1.setStartX(0); 
+                    line1.setStartY(listoffiles.get(i).getLayoutY()+32);
+                    line1.setEndX(200.0f); 
+                    line1.setEndY(listoffiles.get(i).getLayoutY()+32);
+                    root.getChildren().add(line1);
                 }
             }
         });
