@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -118,6 +115,7 @@ public class MainWindowController implements Initializable {
         file.setFileSelectionMode((JFileChooser.DIRECTORIES_ONLY));
         file.showSaveDialog(null);
         System.out.println(file.getCurrentDirectory());
+        System.setProperty("user.dir", file.getCurrentDirectory().toString());
         System.out.println("====>"+this.fileslist.getPrefWidth());
         final List<Button> listoffiles=creat_buttons(file.getCurrentDirectory().toString(), 1,0,this.fileslist.getPrefWidth(),this.fileslist.getPrefHeight());
         for(int i=0;i<listoffiles.size();i++){
@@ -128,7 +126,7 @@ public class MainWindowController implements Initializable {
         }
     }
     public void add_to_edit(Button button){
-        System.out.println(button.getText());
+        handlefile(button.getText());
     }
     public void handlefile() {
         JFileChooser fileChooser = new JFileChooser();
@@ -147,6 +145,21 @@ public class MainWindowController implements Initializable {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    public void handlefile(String filename) {
+        System.out.println(System.getProperty("user.dir"));
+        File selectedfile = new File(System.getProperty("user.dir")+"\\"+filename);
+        String data="";
+        try {
+            Scanner scan = new Scanner(selectedfile);
+            while(scan.hasNextLine()){
+            data=data+"\n"+scan.nextLine();
+            }
+            scan.close();
+            this.codeField.setText(data);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
     @Override
