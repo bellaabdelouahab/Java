@@ -1,6 +1,7 @@
 package Main;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,11 +15,17 @@ import javax.swing.JFileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MainWindowController implements Initializable {
+    //App current dir:
+    public static String Dir= System.getProperty("user.dir").toString();
     //@FXML private Button Save;
     @FXML private TextArea codeField;
     @FXML private TextArea terminalField;
@@ -26,6 +33,7 @@ public class MainWindowController implements Initializable {
     @FXML private Button mainfilebutton;
     @FXML private VBox filemenu;
     @FXML private VBox fileslist;
+    @FXML private HBox edit_area;
     public static void runcommand(String command_ , TextArea terminalField){
         try {
             terminalField.appendText(command_+'\n');
@@ -48,7 +56,6 @@ public class MainWindowController implements Initializable {
         }
     }
     public void savecode(){
-        System.out.println("okay");
         try {
             FileWriter myWriter = new FileWriter("test.java");
             myWriter.write(this.codeField.getText());
@@ -76,6 +83,24 @@ public class MainWindowController implements Initializable {
     public List<Button> creat_buttons(String path,int j,int k,Double maxwidth,Double maxheight){
         List<Button> list = new ArrayList<Button>();
         File folder = new File(path);
+        if(folder.isDirectory()){
+            Button button = new Button();
+            button.setText(folder.getName());
+            button.setMaxWidth(maxwidth);
+            button.setMaxHeight(32);
+            button.setStyle("-fx-alignment:center-left;-fx-background-color:#333333;-fx-text-fill:#a8a8a8");
+            button.setPadding(new Insets(5,0,5,20*k));
+            list.add(button);
+            k++;
+            j++;
+            List<Button> butonsn = new ArrayList<Button>();
+            butonsn=creat_buttons(path+'/'+folder.getName().toString() , j,k+1,maxwidth,maxheight);
+            for(int l=0;l<butonsn.size();l++){
+                list.add(butonsn.get(l));
+                j++;
+            }
+            
+        }
         File[] filelist = folder.listFiles();
         if(filelist!=null)
         for (int i=0 ; i<filelist.length;i++){
@@ -86,7 +111,7 @@ public class MainWindowController implements Initializable {
                 button.setMaxWidth(maxwidth);
                 button.setMaxHeight(32);
                 button.setStyle("-fx-alignment:center-left;-fx-background-color:#333333;-fx-text-fill:a8a8a8");
-                button.setPadding(new Insets(0,0,0,20*k));
+                button.setPadding(new Insets(5,0,5,20*k));
                 list.add(button);
                 j++;
             }
@@ -96,7 +121,7 @@ public class MainWindowController implements Initializable {
                 button.setMaxWidth(maxwidth);
                 button.setMaxHeight(32);
                 button.setStyle("-fx-alignment:center-left;-fx-background-color:#333333;-fx-text-fill:#a8a8a8");
-                button.setPadding(new Insets(0,0,0,20*k));
+                button.setPadding(new Insets(5,0,5,20*k));
                 list.add(button);
                 j++;
                 List<Button> butonsn = new ArrayList<Button>();
@@ -115,18 +140,48 @@ public class MainWindowController implements Initializable {
         file.setFileSelectionMode((JFileChooser.DIRECTORIES_ONLY));
         file.showSaveDialog(null);
         System.out.println(file.getCurrentDirectory());
+        Dir=file.getSelectedFile().toString();
         System.setProperty("user.dir", file.getCurrentDirectory().toString());
         System.out.println("====>"+this.fileslist.getPrefWidth());
-        final List<Button> listoffiles=creat_buttons(file.getCurrentDirectory().toString(), 1,0,this.fileslist.getPrefWidth(),this.fileslist.getPrefHeight());
+        final List<Button> listoffiles=creat_buttons(file.getSelectedFile().toString(), 1,0,this.fileslist.getPrefWidth(),this.fileslist.getPrefHeight());
+        this.fileslist.getChildren().removeAll(this.fileslist.getChildren());
         for(int i=0;i<listoffiles.size();i++){
             listoffiles.get(i).setOnAction(event->{
-                this.add_to_edit((Button)event.getSource());
+                this.add_to_edit(((Button)event.getSource()).getText());
             });
             this.fileslist.getChildren().add(listoffiles.get(i));
         }
     }
-    public void add_to_edit(Button button){
-        handlefile(button.getText());
+    public void add_to_edit(String filename){
+        handlefile(filename);
+        Button ebutton = new Button();
+        ebutton.setText(filename);
+        ebutton.setStyle("-fx-alignment:center-left;-fx-background-color:#252525;-fx-text-fill:#a8a8a8");
+        //ebutton.setPrefWidth(90);
+        ebutton.setPrefHeight(25);
+        ebutton.setPadding(new Insets(0,0,0,0));
+        ebutton.setOnAction(event->{
+            Button e = (Button) event.getSource();
+            handlefile(e.getText().toString());
+        });
+        HBox cont = new HBox();
+        cont.setPrefWidth(100);
+        cont.setPrefHeight(32);
+        cont.setStyle("-fx-background-color:#252525");
+        Button exit_button = new Button();
+        exit_button.setText("X");
+        //exit_button.setPrefWidth(10);
+        exit_button.setPrefHeight(25);
+        exit_button.setPadding(new Insets(0,0,0,10));
+        exit_button.setStyle("-fx-background-color:#252525;-fx-text-fill:#a8a8a8");
+        exit_button.setOnAction(event->{
+            Button e = (Button) event.getSource();
+            this.edit_area.getChildren().remove(e.getParent());
+            this.codeField.setText("");
+        });
+        cont.getChildren().add(ebutton);
+        cont.getChildren().add(exit_button);
+        this.edit_area.getChildren().add(cont);
     }
     public void handlefile() {
         JFileChooser fileChooser = new JFileChooser();
@@ -141,6 +196,7 @@ public class MainWindowController implements Initializable {
                 data=data+"\n"+scan.nextLine();
                 }
                 scan.close();
+                add_to_edit(selectedfile.getName());
                 this.codeField.setText(data);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -149,8 +205,9 @@ public class MainWindowController implements Initializable {
     }
     public void handlefile(String filename) {
         System.out.println(System.getProperty("user.dir"));
-        File selectedfile = new File(System.getProperty("user.dir")+"\\"+filename);
+        File selectedfile = new File(Dir+"\\"+filename);
         String data="";
+        System.out.println(selectedfile);
         try {
             Scanner scan = new Scanner(selectedfile);
             while(scan.hasNextLine()){
@@ -164,7 +221,7 @@ public class MainWindowController implements Initializable {
     }
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        terminalField.setText("PS "+System.getProperty("user.dir")+"> ");
+        terminalField.setText("PS "+Dir+"> ");
         terminalField.setEditable(false);
         filemenu.setVisible(false);
     }

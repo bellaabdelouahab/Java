@@ -13,14 +13,14 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" style="-fx-background-color: #333333; -fx-padding: 0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main.MainWindowController">
    <children>
-      <VBox layoutX="170.0" layoutY="29.0" prefHeight="471.0" prefWidth="580.0" style="-fx-background-color: black;">
+      <VBox layoutX="170.0" layoutY="29.0" prefHeight="470.0" prefWidth="581.0" style="-fx-background-color: black;">
          <children>
-            <TextArea id="textarea_" fx:id="codeField" prefHeight="443.0" prefWidth="581.0" style="-fx-background-color: black; -fx-background-size: 3; -fx-text-fill: #eeeeeeee;" stylesheets="@main.css" />
+            <TextArea id="textarea_" fx:id="codeField" prefHeight="359.0" prefWidth="581.0" style="-fx-background-color: black; -fx-background-size: 3; -fx-text-fill: #eeeeeeee;" stylesheets="@main.css" />
             <Line endX="479.29290771484375" endY="0.2928932309150696" startX="-100.0" />
             <TextArea id="textarea_" fx:id="terminalField" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #222222; -fx-text-fill: #ffffff;" stylesheets="@main.css" />
          </children>
       </VBox>
-      <HBox layoutX="170.0" prefHeight="31.0" prefWidth="492.0" />
+      <HBox fx:id="edit_area" layoutX="170.0" prefHeight="32.0" prefWidth="492.0" />
       <HBox layoutX="663.0" layoutY="-2.0" prefHeight="31.0" prefWidth="87.0">
          <children>
             <Button mnemonicParsing="false" onAction="#compile" prefHeight="31.0" prefWidth="47.0" style="-fx-background-color: #11111111;">
