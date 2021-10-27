@@ -194,7 +194,7 @@ public class MainWindowController implements Initializable {
                 Scanner scan = new Scanner(selectedfile);
                 while(scan.hasNextLine()){
                 data=data+"\n"+scan.nextLine();
-                }
+                } 
                 scan.close();
                 add_to_edit(selectedfile.getName());
                 this.codeField.setText(data);
