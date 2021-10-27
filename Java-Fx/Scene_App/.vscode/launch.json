@@ -4,14 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    
-        {
-            "type": "java",
-            "name": "Launch test_example",
-            "request": "launch",
-            "mainClass": "test_example",
-            "projectName": "Java-test_60a5958b"
-        },
         {
             "name": "Java",
             "type": "java",
@@ -49,9 +41,10 @@
             "type": "java",
             "name": "Launch App",
             "request": "launch",
-            "mainClass": "App",
-            "projectName": "Java-test_60a5958b",
+            "mainClass": "Main.App",
+            "projectName": "Scene_App_fcbff7fc",
             "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-17.0.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
+        
         }
     ]
 }
