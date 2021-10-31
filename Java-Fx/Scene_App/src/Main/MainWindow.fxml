@@ -20,7 +20,7 @@
             <TextArea id="textarea_" fx:id="terminalField" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #222222; -fx-text-fill: #ffffff;" stylesheets="@main.css" />
          </children>
       </VBox>
-      <HBox fx:id="edit_area" layoutX="170.0" prefHeight="32.0" prefWidth="492.0" />
+      <HBox fx:id="edit_area" layoutX="170.0" prefHeight="29.0" prefWidth="492.0" />
       <HBox layoutX="663.0" layoutY="-2.0" prefHeight="31.0" prefWidth="87.0">
          <children>
             <Button mnemonicParsing="false" onAction="#compile" prefHeight="31.0" prefWidth="47.0" style="-fx-background-color: #11111111;">

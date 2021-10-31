@@ -1,7 +1,6 @@
 package Main;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,17 +14,13 @@ import javax.swing.JFileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MainWindowController implements Initializable {
     //App current dir:
-    public static String Dir= System.getProperty("user.dir").toString();
     //@FXML private Button Save;
     @FXML private TextArea codeField;
     @FXML private TextArea terminalField;
@@ -139,8 +134,6 @@ public class MainWindowController implements Initializable {
         JFileChooser file = new JFileChooser();
         file.setFileSelectionMode((JFileChooser.DIRECTORIES_ONLY));
         file.showSaveDialog(null);
-        System.out.println(file.getCurrentDirectory());
-        Dir=file.getSelectedFile().toString();
         System.setProperty("user.dir", file.getCurrentDirectory().toString());
         System.out.println("====>"+this.fileslist.getPrefWidth());
         final List<Button> listoffiles=creat_buttons(file.getSelectedFile().toString(), 1,0,this.fileslist.getPrefWidth(),this.fileslist.getPrefHeight());
@@ -150,30 +143,32 @@ public class MainWindowController implements Initializable {
                 this.add_to_edit(((Button)event.getSource()).getText());
             });
             this.fileslist.getChildren().add(listoffiles.get(i));
+            this.filemenu.setVisible(false);
         }
+        
     }
     public void add_to_edit(String filename){
         handlefile(filename);
         Button ebutton = new Button();
         ebutton.setText(filename);
-        ebutton.setStyle("-fx-alignment:center-left;-fx-background-color:#252525;-fx-text-fill:#a8a8a8");
-        //ebutton.setPrefWidth(90);
-        ebutton.setPrefHeight(25);
+        ebutton.setStyle("-fx-alignment:center;-fx-background-color:#252525;-fx-background-radius:0em;-fx-text-fill:#a8a8a8");
+        ebutton.setPrefWidth(filename.length()*10);
+        ebutton.setPrefHeight(28);
         ebutton.setPadding(new Insets(0,0,0,0));
         ebutton.setOnAction(event->{
             Button e = (Button) event.getSource();
             handlefile(e.getText().toString());
         });
         HBox cont = new HBox();
-        cont.setPrefWidth(100);
-        cont.setPrefHeight(32);
-        cont.setStyle("-fx-background-color:#252525");
+        cont.setPrefWidth(filename.length()*10+28);
+        cont.setPrefHeight(28);
+        cont.setStyle("-fx-background-color:#2525ee");
         Button exit_button = new Button();
         exit_button.setText("X");
-        //exit_button.setPrefWidth(10);
-        exit_button.setPrefHeight(25);
-        exit_button.setPadding(new Insets(0,0,0,10));
-        exit_button.setStyle("-fx-background-color:#252525;-fx-text-fill:#a8a8a8");
+        exit_button.setPrefHeight(28);
+        exit_button.setPrefWidth(28);
+        exit_button.setPadding(new Insets(0,0,0,0));
+        exit_button.setStyle("-fx-alignment:center;-fx-background-radius:0em;-fx-background-color:#252525;-fx-text-fill:#a8a8a8");
         exit_button.setOnAction(event->{
             Button e = (Button) event.getSource();
             this.edit_area.getChildren().remove(e.getParent());
@@ -205,7 +200,7 @@ public class MainWindowController implements Initializable {
     }
     public void handlefile(String filename) {
         System.out.println(System.getProperty("user.dir"));
-        File selectedfile = new File(Dir+"\\"+filename);
+        File selectedfile = new File(System.getProperty("user.dir")+"/"+filename);
         String data="";
         System.out.println(selectedfile);
         try {
@@ -221,7 +216,7 @@ public class MainWindowController implements Initializable {
     }
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        terminalField.setText("PS "+Dir+"> ");
+        terminalField.setText("PS "+System.getProperty("user.dir")+" > ");
         terminalField.setEditable(false);
         filemenu.setVisible(false);
     }
