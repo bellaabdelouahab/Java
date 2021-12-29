@@ -1,4 +1,5 @@
 package Main;
+import javafx.fxml.FXML;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +12,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -20,8 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MainWindowController implements Initializable {
-    //App current dir:
-    //@FXML private Button Save;
     @FXML private TextArea codeField;
     @FXML private TextArea terminalField;
     @FXML private Button savebutton;

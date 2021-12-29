@@ -15,7 +15,7 @@
    <children>
       <VBox layoutX="170.0" layoutY="29.0" prefHeight="470.0" prefWidth="581.0" style="-fx-background-color: black;">
          <children>
-            <TextArea id="textarea_" fx:id="codeField" prefHeight="359.0" prefWidth="581.0" style="-fx-background-color: black; -fx-background-size: 3; -fx-text-fill: #eeeeeeee;" stylesheets="@main.css" />
+            <TextArea id="textarea_" fx:id="codeField" prefHeight="359.0" prefWidth="581.0" style="-fx-background-color: black; -fx-background-size: 5; -fx-text-fill: #eeeeeeee; -fx-border-width: 10;" stylesheets="@main.css" />
             <Line endX="479.29290771484375" endY="0.2928932309150696" startX="-100.0" />
             <TextArea id="textarea_" fx:id="terminalField" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #222222; -fx-text-fill: #ffffff;" stylesheets="@main.css" />
          </children>
