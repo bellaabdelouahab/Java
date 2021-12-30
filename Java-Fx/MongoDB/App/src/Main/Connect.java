@@ -1,6 +1,5 @@
 package Main;
 
-import java.util.List;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
