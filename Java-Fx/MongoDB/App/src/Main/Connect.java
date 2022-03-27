@@ -32,4 +32,7 @@ public class Connect {
     public MongoCursor<Document> ReadThrowCollection(){
         return collection.find().iterator();
     }
+    public void DropDatabase(MongoDatabase database){
+        database.drop();
+    }
 }
